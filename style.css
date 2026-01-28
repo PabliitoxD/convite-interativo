@@ -13,8 +13,12 @@ body {
 
 body {
   font-family: Georgia, serif;
-  background: url('https://i.gifer.com/8pnD.gif') center/cover fixed;
+  background: url('img/mapa-fundo.png') center/100% fixed;
   background-color: #1a1a2e;
+  background-size: 100%;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,15 +80,16 @@ body::before {
 
 /* Imagem fechada (padrão) - mesmo tamanho da aberta */
 .pergaminho-img.closed {
-  opacity: 1;
+  opacity: 0;
   z-index: 2;
   width: 600px;
-  height: 280px
+  height: 280px;
+  animation: fadeInScale 1.2s cubic-bezier(.2, .9, .2, 1) 0.8s forwards;
 }
 
 /* Imagem aberta (oculta por padrão) */
 .pergaminho-img.open {
-  opacity: 1;
+  opacity: 0;
   z-index: 1;
   position: absolute;
   top: 50%;
@@ -95,16 +100,49 @@ body::before {
 
 /* Estado aberto: mostrar imagem aberta, ocultar fechada */
 .pergaminho.open .pergaminho-img.closed {
-  opacity: 0
+  animation: fadeOut 0.6s cubic-bezier(.2, .9, .2, 1) 0s forwards;
+  pointer-events: none;
 }
 
 .pergaminho.open .pergaminho-img.open {
   opacity: 1;
-  animation: unrollBoth 2.5s cubic-bezier(.2, .9, .2, 1) forwards
+  animation: unrollBoth 2s cubic-bezier(.2, .9, .2, 1) 0s forwards;
+}
+
+/* Animação: fade out */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Animação: surgir com fade in e scale */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Animação: desenrolar para cima e para baixo */
 @keyframes unrollBoth {
+  from {
+    clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%)
+  }
+  to {
+    clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%)
+  }
+}
+
+/* Animação: desenrolar anexo */
+@keyframes unrollAnexo {
   from {
     clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%)
   }
@@ -120,11 +158,13 @@ body::before {
   left: 10px;
   z-index: 3;
   opacity: 0;
-  transition: opacity .10s cubic-bezier(.2, .9, .2, 1)
+  transition: opacity .10s cubic-bezier(.2, .9, .2, 1);
+  clip-path: polygon(0 50%, 100% 50%, 100% 50%, 0 50%)
 }
 
 .pergaminho-anexo.show {
-  opacity: 1
+  opacity: 1;
+  animation: unrollAnexo 2.5s cubic-bezier(.2, .9, .2, 1) forwards
 }
 
 .anexo-img {
@@ -186,4 +226,87 @@ body::before {
 @keyframes fadeIn {
   from { opacity: 0 }
   to { opacity: 1 }
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+  body {
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center center;
+  }
+
+  .pergaminho-anexo {
+    top: -150px;
+    left: 15px;
+  }
+
+  .pergaminho-img.closed {
+    width: 85vw;
+    height: auto;
+    aspect-ratio: 600 / 280;
+    max-width: 100%;
+  }
+
+  .pergaminho-img.open {
+    width: 85vw;
+    height: auto;
+    aspect-ratio: 600 / 800;
+    max-width: 100%;
+  }
+
+  .anexo-img {
+    max-width: 200px;
+    max-height: 220px;
+  }
+
+  .close-modal {
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    background-size: cover;
+    background-attachment: scroll;
+    background-position: center center;
+  }
+
+  .pergaminho-anexo {
+    top: -120px;
+    left: 12px;
+  }
+
+  .stage {
+    padding: 10px;
+  }
+
+  .pergaminho-img.closed {
+    width: 90vw;
+    height: auto;
+    aspect-ratio: 600 / 280;
+  }
+
+  .pergaminho-img.open {
+    width: 90vw;
+    height: auto;
+    aspect-ratio: 600 / 800;
+  }
+
+  .anexo-img {
+    max-width: 150px;
+    max-height: 165px;
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+  }
+
+  body::before {
+    background: rgba(26, 26, 46, 0.35);
+  }
 }

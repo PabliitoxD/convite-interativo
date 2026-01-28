@@ -57,10 +57,14 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    // clique e teclado (enter/space)
-    perg.addEventListener('click', togglePerg);
+    // clique e teclado (enter/space) - só funciona quando já está aberto
+    perg.addEventListener('click', function() {
+        if(perg.classList.contains('open')) {
+            togglePerg();
+        }
+    });
     perg.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' || e.key === ' ') {
+        if((e.key === 'Enter' || e.key === ' ') && perg.classList.contains('open')) {
             e.preventDefault();
             togglePerg();
         }
